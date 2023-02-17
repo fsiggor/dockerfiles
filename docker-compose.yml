@@ -1,0 +1,130 @@
+version: "3.9"
+name: media
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: linuxserver/qbittorrent:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - WEBUI_PORT=5080
+    volumes:
+      - qbittorrent:/config
+      - downloads:/downloads
+    ports:
+      - 5080:5080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: "unless-stopped"
+  
+  prowlarr:
+    container_name: prowlarr
+    image: linuxserver/prowlarr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+  
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - radarr:/config
+      - downloads:/downloads
+    ports:
+      - 7878:7878
+    restart: "unless-stopped"
+
+  sonarr:
+    container_name: sonarr
+    image: linuxserver/sonarr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - sonarr:/config
+      - downloads:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+  
+  bazarr:
+    container_name: bazarr
+    image: linuxserver/bazarr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - bazarr:/config
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  jellyseerr:
+    container_name: jellyseerr
+    image: fallenbagel/jellyseerr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - jellyseerr:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+  jellyfin:
+    container_name: jellyfin
+    image: linuxserver/jellyfin:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+    volumes:
+      - jellyfin:/config
+      - downloads:/data
+    ports:
+      - 8096:8096
+      - 7359:7359/udp
+      - 8920:8920
+    restart: unless-stopped
+
+volumes:
+  downloads:
+  qbittorrent:
+  prowlarr:
+  radarr:
+  sonarr:
+  bazarr:
+  jellyseerr:
+  jellyfin:
+
+networks:
+  mynetwork:
+    external: true
