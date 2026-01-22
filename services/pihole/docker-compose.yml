@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    network_mode: "host"
+    environment:
+      - TZ=${TZ:-UTC}
+      - FTLCONF_webserver_api_password=${WEBPASSWORD}
+      - FTLCONF_dns_listeningMode=ALL
+      - FTLCONF_webserver_port=8053
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      # - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+      - SYS_TIME
+      - SYS_NICE
+    restart: unless-stopped

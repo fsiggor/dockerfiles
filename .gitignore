@@ -17,8 +17,23 @@ Thumbs.db
 *.swo
 *~
 
-# Local docker data (if any are mapped locally in future)
+# Service Configurations (Bind Mounts)
+**/config/
+
+# Pi-hole Databases & Backups (Keep config files)
+*.db
+*.db-journal
+**/pihole/*_backups/
+**/pihole/migration_backup/
+services/pihole/etc-pihole/
+
+# SSL Certificates
+**/letsencrypt/
+
+# Logs
+*.log
+
+# Local docker data (Legacy)
 docker-data/
 downloads/
 config/
-etc-pihole
