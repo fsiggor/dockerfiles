@@ -1,0 +1,24 @@
+# Environment variables
+.env
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Local docker data (if any are mapped locally in future)
+docker-data/
+downloads/
+config/
+etc-pihole
