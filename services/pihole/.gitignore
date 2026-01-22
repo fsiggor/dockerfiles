@@ -3,4 +3,4 @@
 *.db-journal
 
 # Ignore entire etc-pihole directory and all contents
-etc-pihole/*
+etc-pihole/
