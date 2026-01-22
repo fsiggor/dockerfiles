@@ -1,5 +1,5 @@
-# Environment variables
-.env
+# Environment variables (Recursively)
+**/.env
 
 # OS generated files
 .DS_Store
@@ -17,23 +17,19 @@ Thumbs.db
 *.swo
 *~
 
-# Service Configurations (Bind Mounts)
+# Service Data & Configs (Bind Mounts)
 **/config/
+**/downloads/
 
-# Pi-hole Databases & Backups (Keep config files)
+# Pi-hole specific
 *.db
 *.db-journal
 **/pihole/*_backups/
 **/pihole/migration_backup/
-services/pihole/etc-pihole/
+**/pihole/dhcp.leases
 
 # SSL Certificates
 **/letsencrypt/
 
 # Logs
 *.log
-
-# Local docker data (Legacy)
-docker-data/
-downloads/
-config/
