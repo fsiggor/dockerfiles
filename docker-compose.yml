@@ -1,15 +1,17 @@
 version: "3.9"
 name: media
 services:
+  # Stack 2 Specific
   qbittorrent:
     container_name: qbittorrent
     image: linuxserver/qbittorrent:latest
+    profiles: ["stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
       - WEBUI_PORT=5080
     volumes:
       - qbittorrent:/config
@@ -23,27 +25,67 @@ services:
   prowlarr:
     container_name: prowlarr
     image: linuxserver/prowlarr:latest
+    profiles: ["stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - prowlarr:/config
     ports:
       - 9696:9696
     restart: unless-stopped
-  
-  radarr:
-    container_name: radarr
-    image: linuxserver/radarr:latest
+
+  # Stack 1 Specific
+  jackett:
+    container_name: jackett
+    image: linuxserver/jackett:latest
+    profiles: ["stack-1"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
+    volumes:
+      - jackett:/config
+      - downloads:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+
+  transmission:
+    container_name: transmission
+    image: linuxserver/transmission:latest
+    profiles: ["stack-1"]
+    networks:
+      - mynetwork
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
+    volumes:
+      - transmission:/config
+      - downloads:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+
+  # Shared Services
+  radarr:
+    container_name: radarr
+    image: linuxserver/radarr:latest
+    profiles: ["stack-1", "stack-2"]
+    networks:
+      - mynetwork
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - radarr:/config
       - downloads:/downloads
@@ -54,12 +96,13 @@ services:
   sonarr:
     container_name: sonarr
     image: linuxserver/sonarr:latest
+    profiles: ["stack-1", "stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - sonarr:/config
       - downloads:/downloads
@@ -70,12 +113,13 @@ services:
   bazarr:
     container_name: bazarr
     image: linuxserver/bazarr:latest
+    profiles: ["stack-1", "stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - bazarr:/config
     ports:
@@ -85,12 +129,13 @@ services:
   jellyseerr:
     container_name: jellyseerr
     image: fallenbagel/jellyseerr:latest
+    profiles: ["stack-1", "stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - jellyseerr:/app/config
     ports:
@@ -100,12 +145,13 @@ services:
   jellyfin:
     container_name: jellyfin
     image: linuxserver/jellyfin:latest
+    profiles: ["stack-1", "stack-2"]
     networks:
       - mynetwork
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=UTC
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-UTC}
     volumes:
       - jellyfin:/config
       - downloads:/data
@@ -119,6 +165,8 @@ volumes:
   downloads:
   qbittorrent:
   prowlarr:
+  jackett:
+  transmission:
   radarr:
   sonarr:
   bazarr:
